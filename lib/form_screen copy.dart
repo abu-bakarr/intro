@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class FormScreen extends StatefulWidget {
   @override
@@ -868,6 +867,7 @@ class FormScreenState extends State<FormScreen> {
                   print(_agentSignature),
                   print(_remarks),
                   print(_dockObserverName),
+                  print(_dockObserverSignature),
                   print(_remarks),
                 },
                 child: Text(
