@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
 // This widget is the root of your application. @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Hello World Demo Application',
+        title: 'Fishery Data Collection',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import './widgets/ButtonWidget.dart';
 import 'widgets/InputField.dart';
 import 'widgets/MultiDropDown.dart';
-import 'dart:async';
 import 'package:geolocator/geolocator.dart';
+import 'widgets/DateWidget.dart';
+import 'package:date_time_picker/date_time_picker.dart';
+import 'widgets/TextWidget.dart';
 
 class SeaObserver extends StatefulWidget {
   @override
@@ -16,21 +18,19 @@ class SeaObserverState extends State<SeaObserver> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String? callSignOfVessel;
-  String? fishingDate;
-  dynamic gridPositionOfReport;
-  String? dateTimeRespresentingTransmission;
+  dynamic fishingDate;
+  Position? gridPositionOfReport;
+  dynamic dateTimeRepresentingTransmission;
   int? shrimpsTotalKG;
   int? demersalsTotalKG;
   int? dischargedTotalKG;
 
   // Data Collection form
   int? haulingNumber;
-  String? shootingTime;
-  int? shootingLatitude;
-  int? shootingLongitude;
-  String? haulingTime;
-  int? haulingLatitude;
-  int? haulingLongitude;
+  dynamic shootingTime;
+  Position? shootingCoordinate;
+  dynamic haulingTime;
+  Position? haulingCoordinate;
   int? waterDepth;
   int? trawlDuration;
   dynamic speciesName;
@@ -47,7 +47,47 @@ class SeaObserverState extends State<SeaObserver> {
     print(haulingNumber);
     print(speciesName[2]);
     print(shootingTime);
-    print(totalMixKG);
+    print(dateTimeRepresentingTransmission);
+    print(gridPositionOfReport);
+  }
+
+  _getCurrentLocation() {
+    Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.best,
+            forceAndroidLocationManager: true)
+        .then((Position position) {
+      setState(() {
+        gridPositionOfReport = position;
+      });
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  _getShootingCoordinate() {
+    Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.best,
+            forceAndroidLocationManager: true)
+        .then((Position position) {
+      setState(() {
+        shootingCoordinate = position;
+      });
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  _getHaulingCoordinate() {
+    Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.best,
+            forceAndroidLocationManager: true)
+        .then((Position position) {
+      setState(() {
+        haulingCoordinate = position;
+      });
+    }).catchError((e) {
+      print(e);
+    });
   }
 
   @override
@@ -73,16 +113,52 @@ class SeaObserverState extends State<SeaObserver> {
                       onSaved: (value) =>
                           setState(() => callSignOfVessel = value!),
                     ),
-                    /* 
-                        FISH DATE SHOULD BE HERE
-                    */
-                    /* 
-                        GPS Location of where data is reported
-                    */
-
-                    /* 
-                        DateTime of Report for daily summary catch
-                    */
+                    Padding(
+                      padding: EdgeInsets.all(5), //Container
+                    ),
+                    TextWidget(name: "Date of actual fishing"),
+                    DateTimeWidget(
+                      dateText: "Select Date",
+                      timeText: "Select Time",
+                      onSaved: (value) => {
+                        setState(() => fishingDate = value),
+                      },
+                      dateOrTime: DateTimePickerType.dateTimeSeparate,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10), //Container
+                    ),
+                    // ignore: deprecated_member_use
+                    FlatButton(
+                      child: TextWidget(
+                          name:
+                              "Click to get GPS Location of where data is reported"),
+                      onPressed: () {
+                        // Get location here
+                        _getCurrentLocation();
+                      },
+                    ),
+                    if (gridPositionOfReport != null)
+                      TextWidget(
+                          name:
+                              "Latitude: ${gridPositionOfReport!.latitude}, Longitude: ${gridPositionOfReport!.longitude}"),
+                    Padding(
+                      padding: EdgeInsets.all(20), //Container
+                    ),
+                    TextWidget(
+                        name: "DateTime of Report for daily summary catch"),
+                    DateTimeWidget(
+                      dateText: "Select Date",
+                      timeText: "Select Time",
+                      onSaved: (value) => {
+                        setState(
+                            () => dateTimeRepresentingTransmission = value),
+                      },
+                      dateOrTime: DateTimePickerType.dateTimeSeparate,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10), //Container
+                    ),
                     InputField(
                       hintText: 'Total summary catch of shrimps in kg',
                       textInputType: TextInputType.number,
@@ -115,25 +191,59 @@ class SeaObserverState extends State<SeaObserver> {
                       onSaved: (value) =>
                           setState(() => haulingNumber = int.tryParse(value!)!),
                     ),
-                    /* 
-                        Time net is put into the water for fishing
-                    */
-                    /* 
-                        Latitude coordinate of shooting time
-                    */
-                    /* 
-                        Longitude coordinate of shooting time
-                    */
-                    /*
-                    Time net is removed from water
-
-                    */
-                    /* 
-                        Hauling Latitude coordinate 
-                    */
-                    /* 
-                        Hauling Longitude coordinate 
-                    */
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10), //Container
+                    ),
+                    TextWidget(
+                        name: "Time net is put into the water for fishing"),
+                    DateTimeWidget(
+                      timeText: "Select Time",
+                      onSaved: (value) => {
+                        setState(() => shootingTime = int.tryParse(value)),
+                      },
+                      dateOrTime: DateTimePickerType.dateTimeSeparate,
+                    ),
+                    // ignore: deprecated_member_use
+                    FlatButton(
+                      child: TextWidget(
+                          name: "Click to get Coordinate of shooting time"),
+                      onPressed: () {
+                        // Get location here
+                        _getShootingCoordinate();
+                      },
+                    ),
+                    if (shootingCoordinate != null)
+                      TextWidget(
+                          name:
+                              "Latitude: ${shootingCoordinate!.latitude}, Longitude: ${shootingCoordinate!.longitude}"),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 30), //Container
+                    ),
+                    TextWidget(name: "Time net is removed from water"),
+                    DateTimeWidget(
+                      dateText: "Select Date",
+                      timeText: "Select Time",
+                      onSaved: (value) => {
+                        setState(() => haulingTime = value),
+                      },
+                      dateOrTime: DateTimePickerType.dateTimeSeparate,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 30), //Container
+                    ),
+                    // ignore: deprecated_member_use
+                    FlatButton(
+                      child: TextWidget(
+                          name: "Click to get Coordinate of Hauling time"),
+                      onPressed: () {
+                        // Get location here
+                        _getHaulingCoordinate();
+                      },
+                    ),
+                    if (haulingCoordinate != null)
+                      TextWidget(
+                          name:
+                              "Latitude: ${haulingCoordinate!.latitude}, Longitude: ${haulingCoordinate!.longitude}"),
                     InputField(
                       hintText: 'Depth of water',
                       textInputType: TextInputType.number,

@@ -1,61 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:date_time_picker/date_time_picker.dart';
+
 
 // ignore: must_be_immutable
-class DateWidget extends StatefulWidget {
-  const DateWidget({
-    this.context,
-    this.initialDate,
-    this.firstDate,
-    this.format,
-    this.selectedDate,
-    this.labelText,
-    this.title,
+class DateTimeWidget extends StatelessWidget {
+  String? dateText;
+  String? timeText;
+  var validateFunction;
+  dynamic dateOrTime;
+  var onSaved;
+  var onChanged;
+  Key? key;
+
+  DateTimeWidget({
+    this.validateFunction,
+    this.onSaved,
+    this.key,
+    this.dateText,
+    this.timeText,
+    this.onChanged,
+    required this.dateOrTime,
   });
-
-  final String? context;
-  final Path? initialDate;
-  final Path? firstDate;
-  final String? format;
-  final String? labelText;
-  final String? title;
-  final DateTime? selectedDate;
-
-  @override
-  _DateWidgetState createState() => _DateWidgetState();
-}
-
-class _DateWidgetState extends State<DateWidget> {
-  DateTime selectedDate = DateTime.now();
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2010, 8),
-        lastDate: DateTime(2100));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-      });
-  }
-
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     return Container(
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Text("${selectedDate.toLocal()}".split(' ')[0]),
-          Padding(
-            padding: EdgeInsets.all(5),
-          ),
-          // ignore: deprecated_member_use
-          ElevatedButton(
-            onPressed: () => _selectDate(context),
-            child: Text('Select date'),
-          ),
-        ],
-      ),
+        width: MediaQuery.of(context).size.width,
+        margin: EdgeInsets.only(left: 40),
+        child: DateTimePicker(
+          type: dateOrTime,
+          dateMask: 'd MMM, yyyy',
+          initialValue: DateTime.now().toString(),
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2100),
+          icon: Icon(Icons.event),
+          dateLabelText: dateText,
+          timeLabelText: timeText,
+          onChanged: onChanged,
+          onSaved: onSaved,
+        ),
     );
   }
 }

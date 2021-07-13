@@ -3,6 +3,7 @@ import './widgets/ButtonWidget.dart';
 import 'widgets/Dropdown.dart';
 import 'widgets/InputField.dart';
 import 'widgets/MultiDropDown.dart';
+import 'widgets/TextWidget.dart';
 
 class Enumerator extends StatefulWidget {
   @override
@@ -101,7 +102,7 @@ class EnumeratorState extends State<Enumerator> {
                     /*
                       Date of data collection
                      */
-                    Text("Choose Types of Boat"),
+                    TextWidget(name: "Choose Types of Boat"),
                     Dropdown(
                       listItems: [
                         "Ghana",

@@ -44,7 +44,6 @@ class MultiDropDown extends StatelessWidget {
             selectedOptionsInfoText: selectedOptionsInfoText,
             selectedOptionsBoxColor: Colors.green,
             //--------end customization selection modal------------
-            // validator: validateFunction,
             errorText: 'Please select one or more option(s)',
             dataSource: listItems,
             filterable: true,

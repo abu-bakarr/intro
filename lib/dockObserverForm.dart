@@ -3,6 +3,7 @@ import './widgets/ButtonWidget.dart';
 import 'widgets/Dropdown.dart';
 import 'widgets/InputField.dart';
 import 'widgets/MultiDropDown.dart';
+import 'widgets/TextWidget.dart';
 
 class DockObserver extends StatefulWidget {
   @override
@@ -100,7 +101,7 @@ class DockObserverState extends State<DockObserver> {
                     onSaved: (value) =>
                         setState(() => _licenseNumber = int.tryParse(value!)!),
                   ),
-                  Text("Choose License Type"),
+                  TextWidget(name: "Choose License Type"),
                   Dropdown(
                     listItems: ["Local", "Foreign"],
                     dropdownClick: (selectItem) => _licenseType = selectItem!,
@@ -123,7 +124,7 @@ class DockObserverState extends State<DockObserver> {
           
               */
 
-              Text("Choose Vessel Type"),
+              TextWidget(name: "Choose Vessel Type"),
               Dropdown(
                 listItems: [
                   "Mid-water Trawler",
@@ -185,7 +186,7 @@ class DockObserverState extends State<DockObserver> {
                     Padding(
                       padding: EdgeInsets.all(10), //Container
                     ),
-                    Text("Choose Log Availability"),
+                    TextWidget(name: "Choose Log Availability"),
                     Dropdown(
                       listItems: ["Yes", "No"],
                       dropdownClick: (selectItem) =>
