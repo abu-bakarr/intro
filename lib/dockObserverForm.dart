@@ -91,6 +91,7 @@ class DockObserverState extends State<DockObserver> {
                     setState(() => _numberOfVessels = int.tryParse(value!)!),
               ),
               ExpansionTile(
+                key: PageStorageKey(this.widget),
                 title: Text(
                   'License Information',
                 ),
